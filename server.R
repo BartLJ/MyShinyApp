@@ -3,11 +3,13 @@ library(gbm)
 library(caret)
 
 ## prepare the data set
+## unfortunately this takes some time
 training <- read.csv("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv",
                      na.strings=c("","NA","#DIV/0!"))
 
-#permute training set to break grouping of similar data
-# and only keep the 15 most predictive features (according to a RFE with random forest with 5-fold CV)
+## permute training set to break grouping of similar data
+## and only keep the 15 most predictive features (according to a RFE with
+## random forest with 5-fold CV which was done separately before)
 cols <- c("classe", "roll_belt", "magnet_dumbbell_z", "yaw_belt", "pitch_belt",
           "magnet_dumbbell_y", "pitch_forearm", "accel_dumbbell_y", "roll_dumbbell",
           "roll_forearm", "roll_arm", "magnet_forearm_z", "magnet_dumbbell_x",
@@ -46,13 +48,15 @@ shinyServer(function(input, output) {
         which.min(model()$valid.error)
     })
     
+    ### output variables
+    
     output$min_val_err <- reactive({
         min_val_err()
     })
     output$trees_min_val_err <- reactive({
         trees_min_val_err()
     })
-    output$distPlot <- renderPlot({
+    output$plot <- renderPlot({
         plot(x = model()$train.error,
              type = "l",
              col = "blue",
@@ -66,8 +70,7 @@ shinyServer(function(input, output) {
                pch = "_", col=c("blue", "red"))
         points(trees_min_val_err(), min_val_err(), pch = 16, col = "red")
         text(trees_min_val_err(), min_val_err(),
-             labels = paste0("(", trees_min_val_err(), ",\n", min_val_err(), ")"),
+             labels = paste0("(", trees_min_val_err(), ",\n ", min_val_err(), ")"),
              pos = 3, col="red", offset = 0.75)
-        
     })
 })

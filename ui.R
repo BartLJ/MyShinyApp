@@ -1,18 +1,14 @@
 library(shiny)
 
-# We want to show the accuracy of a gradient boosted tree fitting for
-# the classification of XXXXXXXX (data to decide, see previous exercises)
+# show the accuracy of a gradient boosted tree fitting for multi-classificiation
 # in terms of the number of trees (x-axis)
-# and for specific values of the meta-parameters (sliders)
-#
-
+# for specific values of the meta-parameters (sliders)
 
 shinyUI(fluidPage(
-  
   # Application title
   titlePanel("Gradient Boosted Tree Classification"),
   
-  # Sidebar with a slider input for number of bins 
+  # Sidebar with slider input for parameters 
   sidebarLayout(
     sidebarPanel(
        h3(tags$u("Data selection")),
@@ -51,17 +47,17 @@ shinyUI(fluidPage(
        submitButton("Refresh Plot", icon("refresh"))
     ),
     
-    # Show the plot and documentation in 2 tabs
+    # Show the plot and documentation in 2 separate tabs
     mainPanel(
        tabsetPanel(
            tabPanel("Plot",
                     h3("Classification Error for GBM"),
-                    plotOutput("distPlot"),
+                    plotOutput("plot"),
                     hr(),
                     p("Minimum validation error: ", tags$b(textOutput("min_val_err", container = span))),
                     p("for", tags$b(textOutput("trees_min_val_err", container = span)), "trees.")
            ),
-           tabPanel("Documentation", includeHTML("documentation.html"))
+           tabPanel("Documentation", includeHTML("README.html"))
        )
     )
   )
